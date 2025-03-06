@@ -51,12 +51,40 @@
     border-radius: 5px;
     transition: background 0.5s;
     margin-top: 20px; /* Pushes button down */
-    z-index: 15;
+    z-index: 12;
 }
 
 .know-more-button:hover {
     background-color: #ff9900f7;
 }
+.nav-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(100, 98, 98, 0.8);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-family: "Mynerve", cursive;
+    font-size: 18px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-nav-message {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+.close-nav-message:hover {
+    color: rgba(255, 0, 0, 0.644);
+}
+
 
 /* Modal Window Styles */
 .modal {
@@ -80,6 +108,7 @@
     font-family: "Mynerve", cursive;
     font-size: 20px;
     color: #333;
+    
 }
 
 .close-modal {
@@ -305,6 +334,7 @@ body {
             catbusFrame = (catbusFrame % 12) + 1;
             catbus.src = `cat${catbusFrame}.png`;
         }
+        
         function moveScene() {
             if (stage === 0) {
                 let leftPosition = parseInt(getComputedStyle(totoro).left);
@@ -514,10 +544,10 @@ catbus.style.zIndex = "5"; // Ensure z-index remains 5 during movement
     let stationTexts = [
         { title: "Welcome !", info: "I am Suhani....", left: 800, bottom: 60, hasButton: false },
         { title: "About Me", info: "...and I am an engineer.", left: 1650, bottom: 80, hasButton: true, moreInfo: "I am passionate about DevOps, automation, and software development." },
-        { title: "Skills", info: "I have a few skills....", left: 3050, bottom: 70, hasButton: true, moreInfo: "I am proficient in Docker, Git, MongoDB, and Java." },
-        { title: "Projects", info: "....and these are my projects...", left: 4150, bottom: 70, hasButton: true, moreInfo: "I have worked on several hands-on projects involving infrastructure and cloud computing." },
-        { title: "Contact", info: "Let's connect!", left: 5800, bottom: 50, hasButton: true, moreInfo: "You can reach out to me via LinkedIn, email, or GitHub." },
-        { title: "Bye", info: "", left: 7100, bottom: 50, hasButton: false }
+        { title: "Skills", info: "I have a few skills....", left: 3050, bottom: 70, hasButton: true, moreInfo: "I am proficient in Docker, Git, MongoDB, and Java.(and a lot more things but i am too lazy to add all that)" },
+        { title: "Projects", info: "....and these are my projects...", left: 4150, bottom: 70, hasButton: true, moreInfo: "I have worked on several hands-on projects involving infrastructure and cloud computing. Just check my github." },
+        { title: "Contact", info: "Let's connect!", left: 5800, bottom: 50, hasButton: true, moreInfo: "Email: xsuhanisinghx@gmail.com" },
+        { title: "Bye!", info: "", left: 7100, bottom: 50, hasButton: false }
     ];
 
     stationTexts.forEach(textData => {
@@ -636,6 +666,25 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseleave', () => {
     ripple.style.opacity = "0"; // Hide effect when cursor leaves
 });
+function showNavigationMessage() {
+    let navMessage = document.createElement("div");
+    navMessage.classList.add("nav-message");
+    navMessage.innerHTML = `
+        <p>Press or hold  <b> -> </b> to go forward</p>
+        <button class="close-nav-message">✖</button>
+    `;
+
+    document.body.appendChild(navMessage);
+
+    // Close message when clicking the button
+    document.querySelector(".close-nav-message").onclick = function () {
+        navMessage.style.display = "none";
+    };
+}
+
+// Show message when the page loads
+window.onload = showNavigationMessage;
+
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowRight') {
                 moveScene();
