@@ -666,6 +666,14 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseleave', () => {
     ripple.style.opacity = "0"; // Hide effect when cursor leaves
 });
+if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+    document.body.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:center; height:100vh; text-align:center; font-family:Arial;">
+            <h2>This website is not available on mobile. Please use a desktop.</h2>
+        </div>
+    `;
+}
+
 function showNavigationMessage() {
     let navMessage = document.createElement("div");
     navMessage.classList.add("nav-message");
