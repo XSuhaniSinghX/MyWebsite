@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Totoro's Short Trip</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f5f5dc;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+        }
+        .scene {
+    display: flex;
+    width: 600vw;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+
+    /* Background1 (Farthest) */
+    background: url('background.png') repeat-x;
+    background-size: auto 100%;
+    z-index: -4;
+}
+
+.scene::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* Background2 (Middle, Forest Layer) */
+    background: url('background2.png') repeat-x;
+    background-size: auto 100%;
+    opacity: 0.85; /* Slight transparency */
+    z-index: -3;
+
+    /* Always shaking slightly */
+    animation: shakeBackground2 3s infinite ease-in-out;
+}
+
+.scene::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* Background3 (Closest) */
+    background: url('background3.png') repeat-x;
+    background-size: auto 100%;
+    opacity: 0.9; /* Slight transparency */
+    z-index: -2;
+}
+
+
+/* Continuous subtle shake effect for background2 */
+@keyframes shakeBackground2 {
+    0%, 100% { transform: translate(0px, 0px); }
+    25% { transform: translate(1px, -1px); }
+    50% { transform: translate(-2px, 2px); }
+    75% { transform: translate(3px, -3px); }
+}
+
+
+/* Reduce opacity of background2.png */
+.scene {
+    background-blend-mode: multiply; /* Blend background2 with background.png */
+    opacity: 1; /* Reduce overall opacity */
+}
+
+        .totoro, .catbus {
+            position: absolute;
+            
+            height: auto;
+        }
+        .totoro {
+            left: 5vw;
+            bottom: 5vh;
+            width: 180px;
+            z-index: 2;
+        }
+        .catbus {
+            left: 30vw;
+            bottom: 0vh;
+            display: block;
+            width: 450px;
+        }
+        .tree {
+            position: absolute;
+            bottom: 0vh;
+            width: 300px;
+        }.house {
+            position: absolute;
+    bottom: 5vh;
+    width: 400px; /* Increase size */
+    left: -0%; /* Keep it at the far left */
+    opacity: 1; /* 100% visibility */
+    z-index: 3;
+        }
+        .bus-stop {
+            position: absolute;
+            bottom: 10vh;
+            width: 120px;
+        }
+        .bus-stop-label {
+            position: absolute;
+            bottom: 22vh;
+            font-size: 24px;
+            font-weight: bold;
+            color: pink;
+            text-align: center;
+            width: 100px;
+        }
+        /* Ensure scene is the reference for absolute positioning */
+
+
+.boulder {
+    position: absolute;  /* Ensures it moves relative to the scene */
+    left: 2vw;  /* Moves it to the left edge */
+    bottom: 0vh; /* Ensures it's touching the ground */
+   z-index: 6;
+}
+
+        .land {
+    position: absolute;
+    bottom: 0; /* Lands should still be at the bottom */
+    width: 1400px;
+    height: 120px; /* Adjust this value to make the land smaller */
+    z-index: -1; /* Keeps land in front of backgrounds but behind Totoro, house, and bus */
+}
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="scene" id="scene"></div>
+        <img src="totoro1.png" class="totoro" id="totoro">
+        <img src="cat1.png" class="catbus" id="catbus">
+    </div>
+    
+    <script>
+        let scenePosition = 0;
+        let isMoving = false;
+        let stage = 0;
+        let totoroFrame = 1;
+        let catbusFrame = 1;
+        const scene = document.getElementById('scene');
+        const totoro = document.getElementById('totoro');
+        const catbus = document.getElementById('catbus');
+        const sceneWidth = window.innerWidth * 5;
+
+       function addElements() {
+            
+             // Add a house at Totoro's initial position
+             let house = document.createElement('img');
+            house.src = 'house.png';
+            house.classList.add('house');
+            house.style.left = '-4vw';
+            scene.appendChild(house);
+        }
+        addElements();
+
+        function animateTotoro() {
+            totoroFrame = (totoroFrame % 12) + 1;
+            totoro.src = `totoro${totoroFrame}.png`;
+        
+        }
+
+        function animateCatbus() {
+            catbusFrame = (catbusFrame % 12) + 1;
+            catbus.src = `cat${catbusFrame}.png`;
+        }
+
+        function moveScene() {
+            if (stage === 0) {
+                let leftPosition = parseInt(getComputedStyle(totoro).left);
+                if (leftPosition < window.innerWidth * 0.4) {
+                    totoro.style.left = `${leftPosition + 5}px`;
+                    animateTotoro();
+                } else {
+                    stage = 1;
+                    totoro.style.display = 'none';
+                }
+            } else if (stage === 1) {
+                stage = 2;
+            }
+        }
+
+        function addLand() {
+    let screenWidth = window.innerWidth;
+    let sceneWidth = screenWidth * 6; // Scene is 600vw
+    let landImageWidth = 1400;
+    let landCount = Math.ceil(sceneWidth / landImageWidth); // Number of land images needed
+
+    const scene = document.getElementById('scene'); // Scene container
+
+    for (let i = 0; i < landCount; i++) {
+        let land = document.createElement('img');
+        land.src = `land${(i % 3) + 1}.png`; // Use land1.png, land2.png, land3.png in a loop
+        land.classList.add('land');
+        land.style.left = `${i * landImageWidth}px`; // Position them side by side
+        scene.appendChild(land);
+    }
+}
+addLand();
+
+function addTrees() {
+    let screenWidth = window.innerWidth;
+    let sceneWidth = screenWidth * 6; // Scene is 600vw
+    let treeCount = Math.ceil(sceneWidth / 500); // Roughly 1 tree every 500px
+
+    const scene = document.getElementById('scene'); // Scene container
+
+    // GROUP A - Behind Totoro & Bus but in Front of Land
+    for (let i = 0; i < treeCount; i++) {
+        let tree = document.createElement('img');
+        tree.src = `tree${(i % 30) + 1}.png`; // Use tree1.png, tree2.png, tree3.png in a loop
+        tree.classList.add('tree', 'tree-group-a');
+        tree.style.left = `${i * 500 + Math.random() * 200}px`; // Spread trees randomly
+        tree.style.bottom = '0vh'; // Adjust height
+        scene.appendChild(tree);
+    }
+
+    // GROUP B - In Front of Everything (Predefined Positions)
+    const predefinedTreePositions = [300, 900, 1500, 2400, 3500, 4200, 5000]; // <-- Your positions here
+    predefinedTreePositions.forEach((pos, index) => {
+        let tree = document.createElement('img');
+        tree.src = `tree${(index % 3) + 1}.png`;
+        tree.classList.add('tree', 'tree-group-b');
+        tree.style.left = `${pos}px`; // Predefined positions
+        tree.style.bottom = '-10vh'; // Taller trees
+        scene.appendChild(tree);
+    });
+}
+function addBoulder() {
+    const scene = document.getElementById('scene'); 
+
+    let boulder = document.createElement('img');
+    boulder.src = 'boulder.png';
+    boulder.classList.add('boulder');
+
+    // 🔥 Position it in the bottom left corner
+    boulder.style.left = '-5vw'; // Close to the left edge
+    boulder.style.bottom = '-2vh'; // Close to the ground
+
+    // 🔥 Adjust Boulder Size
+    boulder.style.width = '400px';  // Resize for better proportions
+    boulder.style.height = '260px';
+
+    scene.appendChild(boulder);
+
+    // 🔥 3D Shaking Effect
+    setInterval(() => {
+        let shakeX = Math.random() * 2 - 1; // Small horizontal shake
+        let shakeY = Math.random() * 1.5 - 0.75; // Small vertical shake
+        boulder.style.transform = `translate(${shakeX}px, ${shakeY}px)`;
+    }, 9000); // Shake every 200ms
+}
+
+addBoulder();
+
+
+
+addTrees();
+
+        function moveBus() {
+    if (stage === 2 && scenePosition > -sceneWidth) {
+        scenePosition -= 5;
+        scene.style.transform = `translateX(${scenePosition}px)`; // Moves scene
+
+        // Moves background.png (farther) very slowly
+        let backgroundMovement1 = scenePosition * 0.05;
+        scene.style.backgroundPosition = `${backgroundMovement1}px 0`; 
+
+        // Moves background2.png (closer) a bit faster
+        let backgroundMovement2 = scenePosition * 0.1;
+        document.querySelector('.scene').style.setProperty('--background2-position', `${backgroundMovement2}px`);
+
+        // Background3 (Closest) moves the fastest
+        let bg3Movement = scenePosition * 0.2;
+        scene.style.setProperty("--bg3-move", `${bg3Movement}px`);
+
+        // Ensure Catbus keeps animating properly
+        animateCatbus();  
+    }
+
+    if (scenePosition <= -sceneWidth) {
+        stage = 3;
+        totoro.style.display = 'block'; // Makes Totoro visible again
+    }
+}
+const style = document.createElement('style');
+style.innerHTML = `
+    .scene::before { background-position: var(--bg2-move) 0; }
+    .scene::after { background-position: var(--bg3-move) 0; }
+`;
+document.head.appendChild(style);
+
+        function moveTotoroFinal() {
+            if (stage === 3) {
+                let leftPosition = parseInt(getComputedStyle(totoro).left);
+                if (leftPosition < window.innerWidth * 0.9) {
+                    totoro.style.left = `${leftPosition + 5}px`;
+                    animateTotoro();
+                } else {
+                    stage = 4;
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight') {
+                moveScene();
+                moveBus();
+                moveTotoroFinal();
+            }
+        });
+       
+
+    </script>
+   
+</body>
+</html>

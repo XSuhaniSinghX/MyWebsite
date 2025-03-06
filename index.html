@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Totoro's Short Trip</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f5f5dc;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+        }
+        .scene {
+            display: flex;
+            width: 600vw;
+            height: 100vh;
+            position: absolute;
+            left: 0; 
+        }
+        .totoro, .catbus {
+            position: absolute;
+            height: auto;
+        }
+        .totoro {
+            left: 5vw;
+            bottom: 130px;
+            width: 150px;
+            z-index: 4;
+        }
+        .catbus {
+            left: 30vw;
+            bottom: 86px;
+            display: block;
+            width: 400px;
+            z-index: 5;
+        }
+        .tree {
+            position: absolute;      
+        }
+        .land {
+    position: absolute;
+    opacity: 1;
+    height: auto;
+}
+.house {
+    position: absolute;
+    height: auto;  /* Maintain aspect ratio */
+}
+
+.station {
+    position: absolute;
+    height: auto;
+  
+}
+        .catbus {
+    transition: bottom 0.5s ease-in-out;
+}
+.ripple {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-animation 1.2s linear;
+    pointer-events: none;
+}
+@keyframes ripple-animation {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+body {
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle, rgba(240, 248, 255, 0.8), rgba(220, 240, 255, 0.6));
+    animation: fluidBackground 6s infinite alternate ease-in-out;
+}
+
+@keyframes fluidBackground {
+    0% {
+        background-size: 100% 100%;
+    }
+    100% {
+        background-size: 105% 105%;
+    }
+}
+.fluid-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('https://www.transparenttextures.com/patterns/canvas.png'); /* Subtle texture */
+    mix-blend-mode: overlay;
+    opacity: 0.3;
+    pointer-events: none;
+    animation: waveDistortion 8s infinite alternate ease-in-out;
+}
+
+@keyframes waveDistortion {
+    0% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+.light-reflection {
+    position: fixed;
+    top: -20%;
+    left: -20%;
+    width: 150vw;
+    height: 150vh;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+    animation: lightWave 10s infinite linear;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+}
+
+@keyframes lightWave {
+    0% {
+        transform: rotate(0deg) translateX(0px);
+    }
+    100% {
+        transform: rotate(360deg) translateX(20px);
+    }
+}
+@keyframes fluidWave {
+    0% {
+        transform: translateY(-2px) skewX(0deg);
+    }
+    50% {
+        transform: translateY(2px) skewX(1deg);
+    }
+    100% {
+        transform: translateY(-2px) skewX(0deg);
+    }
+}
+
+@keyframes slowFloat {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.tree, .totoro, .catbus {
+    animation: fluidWave 5s infinite ease-in-out, slowFloat 10s infinite ease-in-out;
+}
+.cursor-effect {
+    position: absolute;
+    width: 200px;  /* Increase ripple size */
+    height: 200px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    filter: url(#cursorRipple);
+    transition: transform 0.1s ease-out, opacity 0.2s ease-out;
+    opacity: 0.8; /* Make it more visible */
+}
+
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="scene" id="scene"></div>
+        <img src="totoro1.png" class="totoro" id="totoro">
+        <img src="cat1.png" class="catbus" id="catbus">
+    </div>
+    <script>
+        let scenePosition = 0;
+        let isMoving = false;
+        let stage = 0;
+        let totoroFrame = 1;
+        let catbusFrame = 1;
+        const scene = document.getElementById('scene');
+        const totoro = document.getElementById('totoro');
+        const catbus = document.getElementById('catbus');
+        const sceneWidth = 6500;
+
+        function animateTotoro() {
+            totoroFrame = (totoroFrame % 12) + 1;
+            totoro.src = `totoro${totoroFrame}.png`;
+        }
+        function animateCatbus() {
+            catbusFrame = (catbusFrame % 12) + 1;
+            catbus.src = `cat${catbusFrame}.png`;
+        }
+        function moveScene() {
+            if (stage === 0) {
+                let leftPosition = parseInt(getComputedStyle(totoro).left);
+                if (leftPosition < window.innerWidth * 0.4) {
+                    totoro.style.left = `${leftPosition + 5}px`;
+                    animateTotoro();
+                } else {
+                    stage = 1;
+                    totoro.style.display = 'none';
+                }
+            } else if (stage === 1) {
+                stage = 2;
+            }
+        }
+        let trees = [
+    { src: 'tree1.png', left: 150, width: 250, bottom: 22, zIndex: 3, opacity: 1 },
+    { src: 'tree8.png', left: 120, width: 150, bottom: 24, zIndex: 3, opacity: 0.8 }, 
+    { src: 'tree3.png', left: 450, width: 200, bottom: 0, zIndex: 3, opacity: 1 },
+    { src: 'tree5.png', left: 700, width: 150, bottom: 16, zIndex: 2, opacity: 0.5 },
+
+    { src: 'tree5.png', left: 620, width: 170, bottom: 16, zIndex: 2, opacity: 0.5 },
+    { src: 'tree5.png', left: 500, width: 150, bottom: 16, zIndex: 2, opacity: 0.3 },
+    { src: 'tree5.png', left: 730, width: 100, bottom: 16, zIndex: 7, opacity: 1 },
+    { src: 'tree7.png', left: 350, width: 225, bottom: 17, zIndex: 2, opacity: 0.5 }, 
+
+    { src: 'tree5.png', left: 900, width: 170, bottom: 0, zIndex: 2, opacity: 0.5 },
+    { src: 'tree5.png', left: 1100, width: 150, bottom: 0, zIndex: 2, opacity: 0.3 },
+    { src: 'tree5.png', left: 1200, width: 100, bottom: 0, zIndex: 7, opacity: 0.4 },
+    { src: 'tree7.png', left: 1350, width: 225, bottom: 0, zIndex: 2, opacity: 0.5 }, 
+
+    { src: 'tree1.png', left: 800, width: 130, bottom: 12, zIndex: 8, opacity:1 },
+    { src: 'tree8.png', left: 1840, width: 140, bottom: 17, zIndex: 7, opacity: 1 }, 
+    { src: 'tree8.png', left: 2220, width: 150, bottom: 17, zIndex: 3, opacity: 1 },
+    { src: 'tree8.png', left: 2120, width: 200, bottom: 17, zIndex: 2, opacity: 0.4 },
+    { src: 'tree3.png', left: 2150, width: 120, bottom: 7, zIndex: 6, opacity: 0.6 },
+    { src: 'tree6.png', left: 2200, width: 125, bottom: 4, zIndex: 8, opacity: 0.7 }, 
+    { src: 'tree7.png', left: 2800, width: 105, bottom: -2, zIndex: 9, opacity: 0.65 }, 
+    { src: 'tree8.png', left: 3400, width: 140, bottom: 6, zIndex: 10, opacity: 0.8 },  
+];
+
+function addTrees() {
+    let scene = document.getElementById('scene'); // Ensure scene is defined in your HTML
+    trees.forEach(treeData => {
+        let tree = document.createElement('img');
+        tree.src = treeData.src;
+        tree.classList.add('tree');
+        tree.style.left = `${treeData.left}px`;
+        tree.style.width = `${treeData.width}px`;
+        tree.style.bottom = `${treeData.bottom}vh`;
+        tree.style.zIndex = treeData.zIndex;
+        tree.style.opacity = treeData.opacity; // Set opacity
+        scene.appendChild(tree);
+    });
+}
+addTrees();
+
+
+function addHouses() {
+    let houses = [
+        
+        { src: 'House2.png', left: 1740, width: 300, bottom: 10, zIndex: 4 },
+        { src: 'House3.png', left: 1600, width: 300, bottom: 10, zIndex: 4 },
+        { src: 'House4.png', left: 2160, width: 350, bottom: 19, zIndex: 4 },
+        { src: 'House5.png', left: 3000, width: 290, bottom: 12, zIndex: 9 }, 
+        { src: 'House6.png', left: 3700, width: 275, bottom: 7, zIndex: 10 }, 
+        { src: 'House7.png', left: 4500, width: 265, bottom: 9, zIndex: 11 }, 
+        { src: 'House8.png', left: 5300, width: 285, bottom: 5, zIndex: 10 }, 
+    ];
+
+    houses.forEach(houseData => {
+        let house = document.createElement('img');
+        house.src = houseData.src;
+        house.classList.add('house');
+        house.style.left = `${houseData.left}px`;
+        house.style.width = `${houseData.width}px`;
+        house.style.bottom = `${houseData.bottom}vh`;
+        house.style.zIndex = houseData.zIndex;
+        scene.appendChild(house);
+    });
+}
+
+// Call the function to add houses
+addHouses();
+function addStations() {
+    let stations = [
+        { src: 'Station1.png', left: 500, bottom: 20, width: 300, zIndex: 9 }, // Station 1
+
+        { src: 'Station2.png', left: 1900, bottom: 16, width: 350, zIndex: 6 }, // Station 2
+
+        { src: 'Station3.png', left: 2800, bottom: 18, width: 280, zIndex: 6 }, // Station 3
+
+        { src: 'Station4.png', left: 4400, bottom: 6, width: 380, zIndex: 6 }, // Station 4
+
+        { src: 'Station5.png', left: 5400, bottom: 10, width: 300, zIndex: 6 }, // Final station
+        { src: 'Station1.png', left: 6900, bottom: 15, width: 300, zIndex: 9 }, // Station 1
+
+
+    ];
+
+    stations.forEach(stationData => {
+        let station = document.createElement('img');
+        station.src = stationData.src;
+        station.classList.add('station');
+        station.style.left = `${stationData.left}px`;
+        station.style.bottom = `${stationData.bottom}vh`;
+        station.style.width = `${stationData.width}px`; // Manual width control
+        station.style.zIndex = stationData.zIndex;
+
+        scene.appendChild(station);
+    });
+}
+
+// Call the function
+addStations();
+
+
+        function moveBus() {
+            if (stage === 2 && scenePosition > -sceneWidth) {
+    scenePosition -= 20;
+    scene.style.transform = `translateX(${scenePosition}px)`; // Moves scene
+
+    animateCatbus(); // Animate Catbus movement
+
+    // Adjust Catbus height smoothly
+    let catbusHeight;
+    if (scenePosition > -100) {
+    catbusHeight = 95; // First 100px, height remains 95px
+} else if (scenePosition > -200) {
+    // Gradually decrease from 90px to 25px over 100px
+    let progress = (scenePosition + 100) / -100;
+    catbusHeight = 90 - progress * 65; // Interpolates from 90px to 25px (turn1)
+
+} else if (scenePosition > -500) {
+    catbusHeight = 30; // Stay at 30px for 400px
+} else if (scenePosition > -900) {
+    // Gradually increase from 30px to 45px over 300px (turn2)
+    let progress = (scenePosition + 500) / -300;
+    
+    catbusHeight = 30 + progress * 15; // Interpolates from 30px to 45px
+} else if (scenePosition > -1300) {
+    // Gradually increase from 45px to 70px over 300px (turn2b)
+    let progress = (scenePosition + 800) / -300;
+    catbusHeight = 45 + progress * 30; // Interpolates from 45px to 70px
+} else if (scenePosition > -3250) {
+    catbusHeight = 95; // Stay at 95px for 1000px
+} else if (scenePosition > -3350) { 
+    // Gradually decrease from 95px to 45px over 100px (turn3) 
+    let progress = (scenePosition + 3250) / -100;
+    catbusHeight = 95 - progress * 50; // Interpolates from 95px to 45px
+} else if (scenePosition > -3450) {
+    // Gradually decrease from 45px to 25px over 100px
+    let progress = (scenePosition + 3350) / -100;
+    catbusHeight = 45 - progress * 20; // Interpolates from 45px to 25px
+} else if (scenePosition > -4000) {
+    catbusHeight = 25; // Stay at 25px for 500px
+} else if (scenePosition > -4250) {
+    // Gradually increase from 25px to 50px over 100px
+    let progress = (scenePosition + 4000) / -200;
+    catbusHeight = 25 + progress * 25; // Interpolates from 25px to 50px
+} else if (scenePosition > -4250) {
+    catbusHeight = 50; // Stay at 50px for 100px
+} else if (scenePosition > -4350) {
+    // Gradually increase from 50px to 65px over 100px
+    let progress = (scenePosition + 4250) / -100;
+    catbusHeight = 50 + progress * 15; // Interpolates from 50px to 65px
+} else {
+    catbusHeight = 72; // Stay at 65px after -4250px
+}
+
+catbus.style.bottom = `${catbusHeight}px`; // Apply calculated height
+catbus.style.zIndex = "5"; // Ensure z-index remains 5 during movement
+
+
+    // Stop when scene reaches the end
+    if (scenePosition <= -sceneWidth) {
+        stage = 3;
+        totoro.style.display = 'block';
+    }
+}
+
+}function addLand() {
+    let lands = [
+       
+        { src: 'land1.png', left: 100, width: 666, bottom: 15, zIndex: 10 },
+        { src: 'land2.png', left: 600, width: 404, bottom: 5, zIndex: 9 },
+        { src: 'land6.png', left: 900, width: 600, bottom: -7, zIndex: 6 },
+        { src: 'land3.png', left: 1390, width: 666, bottom: 1, zIndex: 7 },
+        { src: 'land3.png', left: 1990, width: 666, bottom: 9, zIndex: 6 },
+        { src: 'land1.png', left: 2600, width: 666, bottom: 15, zIndex: 8 },
+        { src: 'land5.png', left: 3200, width: 600, bottom: 0, zIndex: 6 },
+        { src: 'land2.png', left: 3800, width: 404, bottom: 5, zIndex: 7 },
+        { src: 'land4.png', left: 4100, width: 450, bottom: -3, zIndex: 7 },
+        { src: 'land1.png', left: 4500, width: 666, bottom: -1, zIndex: 6 },
+        { src: 'land3.png', left: 5000, width: 666, bottom: 1, zIndex: 7 },
+        { src: 'land5.png', left: 5600, width: 580, bottom: -6, zIndex: 6 },
+        { src: 'land1.png', left: 6100, width: 666, bottom: 8, zIndex: 8 },
+        { src: 'land1.png', left: 6600, width: 666, bottom: 9, zIndex: 7 },
+        { src: 'land4.png', left: 7200, width: 300, bottom: 10, zIndex: 7 },
+        { src: 'land7.png', left: 7400, width: 360, bottom: 12, zIndex: 9 },
+    ];
+
+    lands.forEach(landData => {
+        let land = document.createElement('img');
+        land.src = landData.src;
+        land.classList.add('land');
+        land.style.left = `${landData.left}px`;
+        land.style.width = `${landData.width}px`;
+        land.style.bottom = `${landData.bottom}vh`;
+        land.style.zIndex = landData.zIndex; // Set z-index dynamically
+        scene.appendChild(land);
+    });
+}
+
+
+addLand();
+        function moveTotoroFinal() {
+            if (stage === 3) {
+                let leftPosition = parseInt(getComputedStyle(totoro).left);
+                if (leftPosition < window.innerWidth * 0.9) {
+                    totoro.style.left = `${leftPosition + 5}px`;
+                    totoro.style.bottom = "90px"; // Ensure Totoro stays at bottom 90px
+                    animateTotoro();
+                } else {
+                    stage = 4;
+                }
+            }
+        }
+       const ripple = document.createElement('div');
+ripple.classList.add('cursor-effect');
+document.body.appendChild(ripple);
+
+document.addEventListener('mousemove', (e) => {
+    ripple.style.transform = `translate(${e.pageX - 100}px, ${e.pageY - 100}px) scale(1.5)`;
+    ripple.style.opacity = "1";
+});
+document.addEventListener('mouseleave', () => {
+    ripple.style.opacity = "0"; // Hide effect when cursor leaves
+});
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight') {
+                moveScene();
+                moveBus();
+                moveTotoroFinal();
+            }
+        });
+    </script>
+</body>
+</html>
