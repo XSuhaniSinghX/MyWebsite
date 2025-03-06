@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mynerve&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Totoro's Short Trip</title>
@@ -8,8 +11,90 @@
         body {
             margin: 0;
             overflow: hidden;
-            background-color: #f5f5dc;
+            
+            background: url('paper.png') no-repeat center center;
         }
+
+.mynerve-regular {
+    font-family: "Mynerve", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.station-title {
+    position: absolute;
+    font-size: 50px;
+    color: #585656c9;
+    
+}
+.station-title, .station-info {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.station-info {
+    position: absolute;
+    font-size: 22px;
+    color: #78777765;
+    
+    margin-top: 10px; /* Adds space below the title */
+}
+
+.know-more-button {
+    position: absolute;
+    background-color: #ffcc00a0;
+    border: none;
+    font-family: "Mynerve", cursive;
+    font-size: 18px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.5s;
+    margin-top: 20px; /* Pushes button down */
+    z-index: 15;
+}
+
+.know-more-button:hover {
+    background-color: #ff9900f7;
+}
+
+/* Modal Window Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 50%;
+
+   background: url('paper.png') no repeat center center;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.modal-content {
+    font-family: "Mynerve", cursive;
+    font-size: 20px;
+    color: #333;
+}
+
+.close-modal {
+    background: rgba(244, 236, 88, 0.76);
+    color: white;
+    border: none;
+    font-size: 18px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    z-index: 10;
+}
+
+
+
         .game-container {
             width: 100vw;
             height: 100vh;
@@ -25,12 +110,13 @@
             height: 100vh;
             position: absolute;
             left: 0; 
+            
            
         }
         .totoro, .catbus {
             position: absolute;
             height: auto;
-            opacity: 0.8;
+            opacity:0.9;
            
         }
         .totoro {
@@ -46,14 +132,17 @@
             display: block;
             width: 400px;
             z-index: 5;
+            
         }
         .tree {
-            position: absolute;      
+            position: absolute;  
+               
         }
         .land {
     position: absolute;
     opacity: 1;
     height: auto;
+   
     
 }
 .house {
@@ -73,7 +162,7 @@
     position: absolute;
     width: 30px;
     height: 30px;
-    background: rgba(255, 255, 255, 0.4);
+    background-color: gray;
     border-radius: 50%;
     transform: scale(0);
     animation: ripple-animation 1.2s linear;
@@ -92,8 +181,9 @@
 body {
     margin: 0;
     overflow: hidden;
-    background: radial-gradient(circle, rgba(240, 248, 255, 0.8), rgba(220, 240, 255, 0.6));
+    background: url('paper.png') no-repeat center center;
     animation: fluidBackground 6s infinite alternate ease-in-out;
+   
 }
 
 @keyframes fluidBackground {
@@ -273,7 +363,12 @@ body {
     { src: 'tree2.png', left: 7250, width: 130, bottom: 15, zIndex: 6, opacity: 1 },
     { src: 'tree7.png', left: 7350, width: 130, bottom: 12, zIndex: 6, opacity: 1 },
 
-   
+    { src: 'bush2.png', left: 2550, width: 90, bottom:22, zIndex: 11, opacity: 1 },
+    { src: 'bush2.png', left: 3780, width: 80, bottom:22, zIndex: 11, opacity: 1 },
+    { src: 'bush2.png', left: 5610, width: 60, bottom:14, zIndex: 11, opacity: 1 },
+    { src: 'bush2.png', left: 6080, width: 60, bottom:15, zIndex: 10, opacity: 1 },
+    { src: 'bush2.png', left: 7400, width: 60, bottom: 18, zIndex: 6, opacity: 1 },
+    
    
 ];
 
@@ -415,7 +510,73 @@ catbus.style.zIndex = "5"; // Ensure z-index remains 5 during movement
         stage = 3;
         totoro.style.display = 'block';
     }
+}function addStationText() {
+    let stationTexts = [
+        { title: "Welcome !", info: "I am Suhani....", left: 800, bottom: 60, hasButton: false },
+        { title: "About Me", info: "...and I am an engineer.", left: 1650, bottom: 80, hasButton: true, moreInfo: "I am passionate about DevOps, automation, and software development." },
+        { title: "Skills", info: "I have a few skills....", left: 3050, bottom: 70, hasButton: true, moreInfo: "I am proficient in Docker, Git, MongoDB, and Java." },
+        { title: "Projects", info: "....and these are my projects...", left: 4150, bottom: 70, hasButton: true, moreInfo: "I have worked on several hands-on projects involving infrastructure and cloud computing." },
+        { title: "Contact", info: "Let's connect!", left: 5800, bottom: 50, hasButton: true, moreInfo: "You can reach out to me via LinkedIn, email, or GitHub." },
+        { title: "Bye", info: "", left: 7100, bottom: 50, hasButton: false }
+    ];
+
+    stationTexts.forEach(textData => {
+        // Create Heading (Title)
+        let titleElement = document.createElement('div');
+        titleElement.innerText = textData.title;
+        titleElement.classList.add('mynerve-regular', 'station-title');
+        titleElement.style.left = `${textData.left}px`;
+        titleElement.style.bottom = `${textData.bottom}vh`;
+        scene.appendChild(titleElement);
+
+        // Create Info (Smaller Text)
+        let infoElement = document.createElement('div');
+        infoElement.innerText = textData.info;
+        infoElement.classList.add('mynerve-regular', 'station-info');
+        infoElement.style.left = `${textData.left}px`;
+        infoElement.style.bottom = `${textData.bottom - 4}vh`; // Slightly below title
+        scene.appendChild(infoElement);
+
+        // Create "Know More" Button (Only if applicable)
+        if (textData.hasButton) {
+            let button = document.createElement('button');
+            button.innerText = "Know More";
+            button.classList.add('know-more-button');
+            button.style.left = `${textData.left + 20}px`; // Slightly right
+            button.style.bottom = `${textData.bottom - 10}vh`; // Below info
+            button.onclick = function() {
+                openModal(textData.title, textData.moreInfo);
+            };
+            scene.appendChild(button);
+        }
+    });
 }
+
+// Function to open modal window
+function openModal(title, content) {
+    let modal = document.createElement('div');
+    modal.classList.add('modal');
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h2>${title}</h2>
+            <p>${content}</p>
+            <button class="close-modal">Close</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    modal.style.display = "block";
+
+    // Close Modal when clicking "Close"
+    modal.querySelector(".close-modal").onclick = function() {
+        modal.style.display = "none";
+        document.body.removeChild(modal);
+    };
+}
+
+// Call function to add text, info, and buttons
+addStationText();
+
+
 
 }function addLand() {
     let lands = [
