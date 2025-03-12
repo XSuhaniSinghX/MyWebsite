@@ -14,7 +14,7 @@
             
             background: url('paper.png') no-repeat center center;
         }
-
+/* Original Styles */
 .mynerve-regular {
     font-family: "Mynerve", cursive;
     font-weight: 400;
@@ -25,18 +25,18 @@
     position: absolute;
     font-size: 50px;
     color: #585656c9;
-    
 }
+
 .station-title, .station-info {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
 .station-info {
     position: absolute;
     font-size: 22px;
     color: #78777765;
-    
     margin-top: 10px; /* Adds space below the title */
 }
 
@@ -57,6 +57,7 @@
 .know-more-button:hover {
     background-color: #ff9900f7;
 }
+
 .nav-message {
     position: fixed;
     bottom: 20px;
@@ -85,7 +86,6 @@
     color: rgba(255, 0, 0, 0.644);
 }
 
-
 /* Modal Window Styles */
 .modal {
     display: none;
@@ -95,8 +95,8 @@
     transform: translate(-50%, -50%);
     width: 60%;
     height: 50%;
-
-   background: url('paper.png') no repeat center center;
+    background: url('paper.png');
+    opacity: 0.9;
     padding: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     z-index: 1000;
@@ -108,9 +108,9 @@
     font-family: "Mynerve", cursive;
     font-size: 20px;
     color: #333;
-    
 }
 
+/* Close Button in Modal */
 .close-modal {
     background: rgba(244, 236, 88, 0.76);
     color: white;
@@ -121,7 +121,132 @@
     margin-top: 10px;
     z-index: 10;
 }
+/* New Styles for Horizontal Slider (Projects Section) */
+.slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin: 10px 0;
+}
 
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 300%;
+}
+
+.slide {
+    min-width: 100%;
+    display: flex;
+    align-items: center; /* Vertically centers the content */
+    padding: 20px;
+    box-sizing: border-box;
+    gap: 1px; /* Adds space between the image and the text */
+}
+/* Set the desired size for the image container */
+.image-container {
+    flex: 1;
+    height: 100px; /* Adjust this based on how small you want the image */
+    width: 100px;  /* Adjust this as well */
+    display: flex;
+    justify-content: center; /* Center the image horizontally */
+    align-items: center; /* Center the image vertically */
+}
+
+/* Ensure the image fits within the container */
+.slider .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Prevents stretching and cropping while keeping the aspect ratio */
+}
+
+.text-container {
+    flex: 2; /* Text takes up 2/3 of the space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 0; /* Remove any margin that might add spacing */
+    padding-left: 0; /* Ensure no padding */
+}
+
+.text-container h3 {
+    font-size: 20px;
+    margin: 0;
+    color: #333;
+}
+
+.description {
+    font-size: 14px;
+    color: #555;
+}
+
+.tech-stack {
+    font-size: 14px;
+    color: #777;
+}
+
+.slider-btn {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+    z-index: 10;
+}
+
+.slider-btn.left {
+    position: absolute;
+    left: 0;
+}
+
+.slider-btn.right {
+    position: absolute;
+    right: 0;
+}
+
+.slider-btn:hover {
+    color: #ffcc00;
+}
+
+.slider .slide img {
+    width: 100%; /* Adjust image size as needed */
+    height: auto;
+}
+
+.modal-content h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.close-modal {
+    background-color: #bc9209f4;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    background-color: #ff9900;
+}
+
+.modal-content h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+.skill-button {
+    padding: 6px 12px;
+    background-color: transparent;
+    color: grey;
+    border: 1px solid grey;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px; /* Increased font size */
+
+    font-family: "Mynerve", cursive;
+}
 
 
         .game-container {
@@ -187,26 +312,7 @@
         .catbus {
     transition: bottom 0.5s ease-in-out;
 }
-.ripple {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background-color: gray;
-    border-radius: 50%;
-    transform: scale(0);
-    animation: ripple-animation 1.2s linear;
-    pointer-events: none;
-}
-@keyframes ripple-animation {
-    0% {
-        transform: scale(0);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(3);
-        opacity: 0;
-    }
-}
+
 body {
     margin: 0;
     overflow: hidden;
@@ -221,58 +327,6 @@ body {
     }
     100% {
         background-size: 105% 105%;
-    }
-}
-.fluid-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: url('https://www.transparenttextures.com/patterns/canvas.png'); /* Subtle texture */
-    mix-blend-mode: overlay;
-    opacity: 0.3;
-    pointer-events: none;
-    animation: waveDistortion 8s infinite alternate ease-in-out;
-}
-
-@keyframes waveDistortion {
-    0% {
-        transform: scale(1.02);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-.light-reflection {
-    position: fixed;
-    top: -20%;
-    left: -20%;
-    width: 150vw;
-    height: 150vh;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
-    animation: lightWave 10s infinite linear;
-    mix-blend-mode: soft-light;
-    pointer-events: none;
-}
-
-@keyframes lightWave {
-    0% {
-        transform: rotate(0deg) translateX(0px);
-    }
-    100% {
-        transform: rotate(360deg) translateX(20px);
-    }
-}
-@keyframes fluidWave {
-    0% {
-        transform: translateY(-2px) skewX(0deg);
-    }
-    50% {
-        transform: translateY(2px) skewX(1deg);
-    }
-    100% {
-        transform: translateY(-2px) skewX(0deg);
     }
 }
 
@@ -290,18 +344,6 @@ body {
 
 .tree, .totoro, .catbus {
     animation: fluidWave 5s infinite ease-in-out, slowFloat 10s infinite ease-in-out;
-}
-.cursor-effect {
-    position: absolute;
-    width: 200px;  /* Increase ripple size */
-    height: 200px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-    pointer-events: none;
-    mix-blend-mode: overlay;
-    filter: url(#cursorRipple);
-    transition: transform 0.1s ease-out, opacity 0.2s ease-out;
-    opacity: 0.8; /* Make it more visible */
 }
 
     </style>
@@ -543,11 +585,59 @@ catbus.style.zIndex = "5"; // Ensure z-index remains 5 during movement
 }function addStationText() {
     let stationTexts = [
         { title: "Welcome !", info: "I am Suhani....", left: 800, bottom: 60, hasButton: false },
-        { title: "About Me", info: "...and I am an engineer.", left: 1650, bottom: 80, hasButton: true, moreInfo: "I am passionate about DevOps, automation, and software development." },
-        { title: "Skills", info: "I have a few skills....", left: 3050, bottom: 70, hasButton: true, moreInfo: "I am proficient in Docker, Git, MongoDB, and Java.(and a lot more things but i am too lazy to add all that)" },
-        { title: "Projects", info: "....and these are my projects...", left: 4150, bottom: 70, hasButton: true, moreInfo: "I have worked on several hands-on projects involving infrastructure and cloud computing. Just check my github." },
-        { title: "Contact", info: "Let's connect!", left: 5800, bottom: 50, hasButton: true, moreInfo: "Email: xsuhanisinghx@gmail.com" },
-        { title: "Bye!", info: "", left: 7100, bottom: 50, hasButton: false }
+        { title: "About Me", info: "...and I am an engineer.", left: 1650, bottom: 80, hasButton: true, moreInfo: "Hi, I’m Suhani! I’m a DevSecOps engineer with a passion for building secure and scalable systems. When I’m not working on tech projects, you’ll usually find me hanging out with my cats. I’m always eager to learn and take on new challenges, so if you want to connect or collaborate, feel free to reach out!" },
+        { title: "Projects", info: "....and these are my projects....", left: 3050, bottom: 70, hasButton: true, moreInfo: "" },
+        { title: "Skills", info: "I have a few skills....", left: 4150, bottom: 70, hasButton: true, moreInfo: `
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; ">
+            <button class="skill-button">DevSecOps</button>
+            <button class="skill-button">Cloud Computing</button>
+            <button class="skill-button">Docker</button>
+            <button class="skill-button">Kubernetes</button>
+            <button class="skill-button">CI/CD</button>
+            <button class="skill-button">Cybersecurity</button>
+            <button class="skill-button">Git</button>
+            <button class="skill-button">Linux</button>
+            <button class="skill-button">MongoDB</button>
+            <button class="skill-button">Node.js</button>
+            <button class="skill-button">Java</button>
+            <button class="skill-button">Azure</button>
+        </div>
+    ` 
+
+         },
+        { title: "Certifications", info: "Here are my certifications!", left: 5800, bottom: 50, hasButton: true, moreInfo: `
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+    <figure style="text-align: center;">
+        <img src="ceh.png" alt="CEH Badge" style="width: 100px; height: auto;" />
+        <figcaption style="font-size: 12px; color: #333;">CEH</figcaption>
+    </figure>
+    <figure style="text-align: center;">
+        <img src="cnd.png" alt="CND Badge" style="width: 100px; height: auto;" />
+        <figcaption style="font-size: 12px; color: #333;">CND</figcaption>
+    </figure>
+    <figure style="text-align: center;">
+        <img src="cscu.png" alt="CSCU Badge" style="width: 100px; height: auto;" />
+        <figcaption style="font-size: 12px; color: #333;">CSCU</figcaption>
+    </figure>
+    <figure style="text-align: center;">
+        <img src="german3.png" alt="German 3 Badge" style="width: 100px; height: auto;" />
+        <figcaption style="font-size: 12px; color: #333;">German 3</figcaption>
+    </figure>
+   
+</div>
+
+    ` },
+        { title: "Contact", info: "Let's connect!", left: 7100, bottom: 60, hasButton: true, moreInfo: `
+            <div style="text-align: center;">
+                <p>Feel free to reach out to me through the following platforms:</p>
+                <ul style="list-style-type: none; padding: 0; display: flex; justify-content: center; gap: 20px;">
+                    <li><a href="https://www.linkedin.com/in/suhani-908b8224b/" target="_blank"><img src="linkedin.png" alt="LinkedIn" style="width: 30px; height: 30px;" /></a></li>
+                    <li><a href="https://github.com/xsuhanisinghx" target="_blank"><img src="github.png" alt="GitHub" style="width: 30px; height: 30px;" /></a></li>
+                    <li><a href="mailto:xsuhanisinghx@gmail.com"><img src="email.png" alt="Email" style="width: 30px; height: 30px;" /></a></li>
+                    <li><a href="https://www.instagram.com/xbeelzebub666x" target="_blank"><img src="instagram.png" alt="Instagram" style="width: 30px; height: 30px;" /></a></li>
+                </ul>
+            </div>
+        `}
     ];
 
     stationTexts.forEach(textData => {
@@ -574,27 +664,97 @@ catbus.style.zIndex = "5"; // Ensure z-index remains 5 during movement
             button.classList.add('know-more-button');
             button.style.left = `${textData.left + 20}px`; // Slightly right
             button.style.bottom = `${textData.bottom - 10}vh`; // Below info
-            button.onclick = function() {
-                openModal(textData.title, textData.moreInfo);
-            };
+            if (textData.title === "Projects") {
+                button.onclick = function() {
+                    openModal(textData.title, "");
+                };
+            } else {
+                button.onclick = function() {
+                    openModal(textData.title, textData.moreInfo);
+                };
+            }
             scene.appendChild(button);
         }
     });
 }
 
-// Function to open modal window
+// Function to open modal window with projects slider
 function openModal(title, content) {
     let modal = document.createElement('div');
     modal.classList.add('modal');
     modal.innerHTML = `
-        <div class="modal-content">
-            <h2>${title}</h2>
-            <p>${content}</p>
-            <button class="close-modal">Close</button>
+       <div class="modal-content">
+    <h2>${title}</h2>
+    <p>${content}</p>
+    <!-- Slider will only appear in the Projects modal -->
+    ${title === "Projects" ? `
+        <div class="slider-container">
+            <button class="slider-btn left">❮</button>
+            <div class="slider">
+                <div class="slide">
+                    <div class="image-container">
+                        <img src="project1.png" alt="Project 1">
+                    </div>
+                    <div class="text-container">
+                        <h3>AutoScaleApp</h3>
+                        <p class="description">A cloud-native app that automatically scales to handle increased traffic and resource needs.</p>
+                        <p class="tech-stack"><strong>Tech Stack:</strong> Docker, Kubernetes, Jenkins, MySQL, Azure</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="image-container">
+                        <img src="project2.png" alt="Project 2">
+                    </div>
+                    <div class="text-container">
+                        <h3>Text Extractor</h3>
+                        <p class="description">A tool to xtracts text from images, PDFs, and Word documents.</p>
+                        <p class="tech-stack"><strong>Tech Stack:</strong> Java, Tesseract OCR, Apache POI</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="image-container">
+                        <img src="project3.png" alt="Project 3">
+                    </div>
+                    <div class="text-container">
+                        <h3>FelineOS Kernel</h3>
+                        <p class="description">A custom-built 64-bit kernel and operating system.</p>
+                        <p class="tech-stack"><strong>Tech Stack:</strong> Docker, Assembly, Makefile, C</p>
+                    </div>
+                </div>
+                <!-- Add more slides as needed -->
+            </div>
+            <button class="slider-btn right">❯</button>
         </div>
+    ` : ''}
+    <button class="close-modal">Close</button>
+</div>
+
     `;
     document.body.appendChild(modal);
     modal.style.display = "block";
+
+    // Slider functionality for Projects modal only
+    if (title === "Projects") {
+        let currentSlide = 0;
+        const slides = modal.querySelectorAll(".slide");
+        const slider = modal.querySelector(".slider");
+
+        // Move to next slide
+        modal.querySelector(".slider-btn.right").onclick = function() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+        };
+
+        // Move to previous slide
+        modal.querySelector(".slider-btn.left").onclick = function() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+        };
+    }
 
     // Close Modal when clicking "Close"
     modal.querySelector(".close-modal").onclick = function() {
@@ -605,7 +765,6 @@ function openModal(title, content) {
 
 // Call function to add text, info, and buttons
 addStationText();
-
 
 
 }function addLand() {
