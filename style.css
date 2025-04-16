@@ -242,11 +242,12 @@ font-family: "Mynerve", cursive;
 .game-container {
     width: 100vw;
     height: 100vh;
-    position: relative;
+    position: absolute;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
     z-index: 5;
+    size: auto;
 }
 .scene {
     display: flex;

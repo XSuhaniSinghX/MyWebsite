@@ -489,9 +489,8 @@ document.querySelector(".close-nav-message").onclick = function () {
     navMessage.style.display = "none";
 };
 }
-
+showNavigationMessage();
 // Show message when the page loads
-window.onload = showNavigationMessage;
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowRight') {
